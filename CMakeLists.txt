@@ -14,6 +14,7 @@ endif()
 include_directories("${PROJECT_SOURCE_DIR}")
 find_package(Legion REQUIRED)
 find_package(HDF5 REQUIRED COMPONENTS C CXX)
+add_compile_definitions(USE_DCR)
 
 add_executable(debug_hdf5 debug_hdf5.cpp my_mapper.cpp)
 target_include_directories(debug_hdf5 PRIVATE ${HDF5_INCLUDE_DIRS})
