@@ -78,7 +78,15 @@ void top_level_task(const Task *task, const vector<PhysicalRegion> &regions,
     map<FieldID, const char*> field_map {
         {FID_DUMMY, "Dummy"}
     };
+
+
+    /* Setting the last argument to true leads to warnings when run with -lg:warn 
+     * and works for a single rank with the correct output. It leads to an error on
+     * multiple ranks.
+     * Setting the last argument to false leads to no errors but the output is not witten.
+     */
     AttachLauncher attach_launcher(EXTERNAL_HDF5_FILE, file_lr, file_lr, false, true);
+
     attach_launcher.attach_hdf5(FILENAME, field_map, LEGION_FILE_READ_WRITE);
     PhysicalRegion pr = runtime->attach_external_resource(ctx, attach_launcher);
 
@@ -123,5 +131,6 @@ int main(int argc, char *argv[]) {
     file.close();
 
     register_mappers();
-    return Runtime::start(argc, argv);
+    int err = Runtime::start(argc, argv);
+    cout << "Finished with error code " << err << endl;
 }
